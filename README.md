@@ -108,17 +108,18 @@ alors disponible.
 
 ## Pipeline CI
 
-Le workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) s'exécute sur
-chaque push et chaque pull request. Il lance deux jobs en parallèle, avec Python
-3.12 et les dépendances de développement :
+La CI s'exécute sur chaque push et chaque pull request. Elle vérifie le style
+avec Ruff et lance les tests avec pytest. Selon la configuration du workflow,
+les tests peuvent être exécutés séparément pour plusieurs versions de Python ;
+la PR `feat/ci-rapide` ci-dessous illustre cette organisation.
 
 - **Lint (Ruff)** exécute `ruff check .` pour détecter les erreurs de style et
   certains problèmes dans le code.
 - **Test (pytest)** exécute `pytest` pour vérifier le comportement de
   l'application.
 
-Les deux jobs doivent réussir pour satisfaire la règle de statut requise par
-`main`. Les captures montrent les deux issues possibles :
+Les vérifications requises doivent réussir pour satisfaire la règle de statut
+de `main`. Les captures montrent plusieurs situations :
 
 Les contrôles Ruff et pytest ont réussi sur le dépôt. Les coches vertes
 confirment que les vérifications automatiques ont abouti.
@@ -143,3 +144,18 @@ par le push et la mise à jour de la PR échouent après la modification qui cas
 les vérifications. Le contrôle s'applique ainsi à la fois au push et à la PR.
 
 ![Historique des exécutions CI montrant les succès initiaux puis les échecs sur la branche feat/casse-test](<doc/casse-test2.png>)
+
+Lors de l'évolution du workflow, le nom du check de test a changé : les checks
+`Test (Python 3.11)`, `Test (Python 3.12)` et `Test (Python 3.13)` ont remplacé
+l'ancien check `Test (pytest)`. Or, la règle de protection de `main` exige
+toujours l'ancien nom. GitHub attend donc un statut qui ne sera plus publié
+(`Expected — Waiting for status to be reported`) et bloque la fusion, même si
+les nouveaux checks réussissent et que la PR est approuvée.
+
+Pour rétablir la fusion, il faut mettre à jour les checks obligatoires dans les
+règles de `main` : retirer `Test (pytest)` et sélectionner les nouveaux checks
+de test. Une autre possibilité est de conserver un nom de check stable dans le
+workflow afin d'éviter de devoir modifier les règles à chaque changement de
+configuration.
+
+![PR approuvée avec les nouveaux checks réussis, mais bloquée par l'ancien check Test (pytest) toujours requis](<doc/feat-ci.png>)
