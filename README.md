@@ -40,6 +40,9 @@ Les deux jobs utilisent le cache pip pour accélérer l'installation des
 dépendances entre les exécutions. Chaque job de test publie son rapport JUnit
 comme artefact téléchargeable, conservé pendant 7 jours. Si une nouvelle
 exécution démarre sur la même référence Git, l'exécution précédente est annulée.
+Le job **CI OK** attend la réussite de Ruff et des trois exécutions de tests ;
+il peut être choisi comme unique vérification obligatoire dans la règle de
+protection de `main`.
 
 ## Lancer avec Docker
 
