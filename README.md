@@ -153,9 +153,25 @@ toujours l'ancien nom. GitHub attend donc un statut qui ne sera plus publié
 les nouveaux checks réussissent et que la PR est approuvée.
 
 Pour rétablir la fusion, il faut mettre à jour les checks obligatoires dans les
-règles de `main` : retirer `Test (pytest)` et sélectionner les nouveaux checks
-de test. Une autre possibilité est de conserver un nom de check stable dans le
-workflow afin d'éviter de devoir modifier les règles à chaque changement de
+règles de `main` : retirer `Test (pytest)` et sélectionner les checks publiés par
+la configuration actuelle du workflow. Dans cet exemple, les checks requis sont
+`Lint (Ruff)` et `CI OK`. Conserver des noms de checks stables dans le workflow
+permet aussi d'éviter de devoir modifier les règles à chaque changement de
 configuration.
 
 ![PR approuvée avec les nouveaux checks réussis, mais bloquée par l'ancien check Test (pytest) toujours requis](<doc/feat-ci.png>)
+
+La configuration des règles de `main` exige maintenant que les branches soient
+à jour avant la fusion. Elle rend également obligatoires les checks `Lint (Ruff)`
+et `CI OK`. Ainsi, GitHub bloque une PR si le lint ou le check de validation CI
+requis n'a pas réussi ; une branche en retard sur `main` doit d'abord être mise
+à jour.
+
+![Checks Lint (Ruff) et CI OK configurés comme statuts requis, avec obligation de mettre la branche à jour](<doc/checks-ruleset.png>)
+
+Après cette mise à jour, la PR est approuvée, les checks requis `CI / CI OK` et
+`CI / Lint (Ruff)` ont réussi et GitHub ne signale aucun conflit avec la branche
+cible. La fusion peut donc être effectuée. Les checks de test par version de
+Python apparaissent également comme réussis dans la liste.
+
+![PR approuvée, checks CI réussis et aucun conflit avec la branche cible](<doc/check-CIOK.png>)
