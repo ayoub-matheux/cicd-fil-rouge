@@ -64,3 +64,12 @@ docker run --rm -p 8000:8000 taskflow
 
 <!-- Lab J1 : listez les règles activées sur main, pourquoi chacune, et ajoutez la capture du push refusé -->
 À compléter.
+![push refuse ](doc/push-refuse.png)
+
+![branche, PR, approbation, merge](doc/branche-PR-approbation-merge.png)
+
+![creat pull request](<doc/create pull request.png>)
+
+![alt text](<doc/approver pull request.png>)
+
+![alt text](<doc/marge request.png>)
