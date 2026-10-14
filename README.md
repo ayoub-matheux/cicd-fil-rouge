@@ -27,6 +27,23 @@ ruff check .     # lint
 ruff format .    # mise en forme
 ```
 
+## Pipeline CI
+
+Le workflow GitHub Actions `.github/workflows/ci.yml` s'exécute à chaque push
+et à chaque pull request. Il contient deux jobs indépendants :
+
+- **Lint (Ruff)** vérifie le style et les erreurs courantes du code Python.
+- **Tests** exécute `pytest` sous Python 3.11, 3.12 et 3.13, chaque version
+  dans un job séparé.
+
+Les deux jobs utilisent le cache pip pour accélérer l'installation des
+dépendances entre les exécutions. Chaque job de test publie son rapport JUnit
+comme artefact téléchargeable, conservé pendant 7 jours. Si une nouvelle
+exécution démarre sur la même référence Git, l'exécution précédente est annulée.
+Le job **CI OK** attend la réussite de Ruff et des trois exécutions de tests ;
+il peut être choisi comme unique vérification obligatoire dans la règle de
+protection de `main`.
+
 ## Lancer avec Docker
 
 ```bash
